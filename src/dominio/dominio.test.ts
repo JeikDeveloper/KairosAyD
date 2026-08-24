@@ -237,7 +237,7 @@ describe('arqueo', () => {
 
   it('cuadra cuando lo contado es igual a lo esperado', () => {
     const movimientos = [mov('venta', 487_300, 'efectivo'), mov('venta', 212_500, 'nequi')]
-    const arqueo = revelar(movimientos, billeteras, [
+    const arqueo = revelar(saldosPorBilletera(movimientos), billeteras, [
       { billeteraId: 'efectivo', contado: 487_300, motivo: null, nota: null },
       { billeteraId: 'nequi', contado: 212_500, motivo: null, nota: null },
     ])
@@ -249,7 +249,7 @@ describe('arqueo', () => {
 
   it('trata una diferencia pequeña como sencillo, no como alarma', () => {
     const movimientos = [mov('venta', 487_300, 'efectivo')]
-    const arqueo = revelar(movimientos, [billetera('efectivo')], [
+    const arqueo = revelar(saldosPorBilletera(movimientos), [billetera('efectivo')], [
       { billeteraId: 'efectivo', contado: 486_800, motivo: null, nota: null },
     ])
 
@@ -261,7 +261,7 @@ describe('arqueo', () => {
   it('marca para revisar lo que pasa del umbral', () => {
     const movimientos = [mov('venta', 487_300, 'efectivo')]
     const arqueo = revelar(
-      movimientos,
+      saldosPorBilletera(movimientos),
       [billetera('efectivo')],
       [{ billeteraId: 'efectivo', contado: 437_300, motivo: null, nota: null }],
       UMBRAL_DIFERENCIA_POR_DEFECTO,
@@ -273,12 +273,12 @@ describe('arqueo', () => {
 
   it('no deja cerrar mientras una diferencia no tenga motivo', () => {
     const movimientos = [mov('venta', 487_300, 'efectivo')]
-    const sinMotivo = revelar(movimientos, [billetera('efectivo')], [
+    const sinMotivo = revelar(saldosPorBilletera(movimientos), [billetera('efectivo')], [
       { billeteraId: 'efectivo', contado: 437_300, motivo: null, nota: null },
     ])
     expect(sinMotivo.listoParaCerrar).toBe(false)
 
-    const conMotivo = revelar(movimientos, [billetera('efectivo')], [
+    const conMotivo = revelar(saldosPorBilletera(movimientos), [billetera('efectivo')], [
       { billeteraId: 'efectivo', contado: 437_300, motivo: 'desconocido', nota: null },
     ])
     expect(conMotivo.listoParaCerrar).toBe(true)
@@ -289,7 +289,7 @@ describe('arqueo', () => {
     // da igual, pero cada billetera está mal. Esto solo se ve arqueando
     // billetera por billetera.
     const movimientos = [mov('venta', 300_000, 'efectivo'), mov('venta', 100_000, 'nequi')]
-    const arqueo = revelar(movimientos, billeteras, [
+    const arqueo = revelar(saldosPorBilletera(movimientos), billeteras, [
       { billeteraId: 'efectivo', contado: 250_000, motivo: 'monto_mal_escrito', nota: null },
       { billeteraId: 'nequi', contado: 150_000, motivo: 'monto_mal_escrito', nota: null },
     ])
@@ -301,7 +301,7 @@ describe('arqueo', () => {
   it('no le exige cuadre exacto a una cuenta mezclada con la personal', () => {
     const mezclada = [billetera('nequi', { mezclada: true })]
     const arqueo = revelar(
-      [mov('venta', 212_500, 'nequi')],
+      saldosPorBilletera([mov('venta', 212_500, 'nequi')]),
       mezclada,
       [{ billeteraId: 'nequi', contado: 890_000, motivo: null, nota: null }],
     )
@@ -311,10 +311,39 @@ describe('arqueo', () => {
     expect(arqueo.listoParaCerrar).toBe(true)
   })
 
+  it('trabaja con saldos ya sumados, no con la lista de movimientos', () => {
+    // Esta es la razón de que `revelar` reciba un mapa de saldos: sumar la
+    // historia completa aquí obligaría a traerla desde la API, que corta en
+    // 1000 filas. A los pocos meses el arqueo calcularía el esperado con
+    // datos parciales y marcaría faltantes inventados, sin dar ningún error.
+    //
+    // Postgres suma la columna entera con la vista `saldos_por_billetera`,
+    // sin ese límite. Aquí se comprueba que un saldo que jamás cabría en una
+    // página de resultados se maneja igual de bien.
+    const saldosDeAniosDeVentas = new Map([['efectivo', 91_450_800]])
+
+    const arqueo = revelar(saldosDeAniosDeVentas, [billetera('efectivo')], [
+      { billeteraId: 'efectivo', contado: 91_450_800, motivo: null, nota: null },
+    ])
+
+    expect(arqueo.filas[0]?.esperado).toBe(91_450_800)
+    expect(arqueo.filas[0]?.veredicto).toBe('cuadra')
+  })
+
+  it('una billetera sin movimientos espera cero, no se cae', () => {
+    const arqueo = revelar(new Map(), [billetera('efectivo'), billetera('nequi')], [
+      { billeteraId: 'efectivo', contado: 0, motivo: null, nota: null },
+      { billeteraId: 'nequi', contado: 0, motivo: null, nota: null },
+    ])
+
+    expect(arqueo.filas.every((f) => f.esperado === 0 && f.veredicto === 'cuadra')).toBe(true)
+    expect(arqueo.listoParaCerrar).toBe(true)
+  })
+
   it('el efectivo arrastra el saldo de ayer, no arranca en cero', () => {
     const ayer = [mov('venta', 100_000, 'efectivo', { sesionId: 's0' })]
     const hoy = [mov('venta', 50_000, 'efectivo', { sesionId: 's1' })]
-    const arqueo = revelar([...ayer, ...hoy], [billetera('efectivo')], [
+    const arqueo = revelar(saldosPorBilletera([...ayer, ...hoy]), [billetera('efectivo')], [
       { billeteraId: 'efectivo', contado: 150_000, motivo: null, nota: null },
     ])
 
@@ -326,7 +355,7 @@ describe('arqueo', () => {
 describe('cierre', () => {
   it('convierte la diferencia en un movimiento visible, con su motivo', () => {
     const arqueo = revelar(
-      [mov('venta', 487_300, 'efectivo')],
+      saldosPorBilletera([mov('venta', 487_300, 'efectivo')]),
       [billetera('efectivo')],
       [{ billeteraId: 'efectivo', contado: 437_300, motivo: 'desconocido', nota: 'Revisar mañana' }],
     )
@@ -348,7 +377,7 @@ describe('cierre', () => {
     const conteos = [
       { billeteraId: 'efectivo', contado: 490_000, motivo: 'sobro_sencillo' as const, nota: null },
     ]
-    const arqueo = revelar([mov('venta', 487_300, 'efectivo')], [billetera('efectivo')], conteos)
+    const arqueo = revelar(saldosPorBilletera([mov('venta', 487_300, 'efectivo')]), [billetera('efectivo')], conteos)
     const ajustes = ajustesDelCierre(arqueo, conteos)
 
     expect(ajustes[0]?.tipo).toBe('ajuste_sobrante')

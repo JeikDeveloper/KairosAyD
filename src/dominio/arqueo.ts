@@ -1,11 +1,4 @@
-import { saldosPorBilletera } from './movimientos'
-import type {
-  Billetera,
-  ConteoArqueo,
-  Movimiento,
-  Pesos,
-  SesionCaja,
-} from './tipos'
+import type { Billetera, ConteoArqueo, Pesos, SesionCaja } from './tipos'
 
 /**
  * Arqueo y cierre de caja.
@@ -49,18 +42,27 @@ export interface Arqueo {
 }
 
 /**
- * Compara lo contado contra lo que dicen los movimientos.
+ * Compara lo contado contra lo que dicen los saldos.
  *
- * @param movimientos todos los movimientos históricos, no solo los del día:
- *   el efectivo del cajón viene arrastrado de ayer.
+ * @param saldos saldo por billetera, calculado en Postgres por la vista
+ *   `saldos_por_billetera`.
+ *
+ *   Recibe los saldos ya sumados y NO la lista de movimientos, a propósito.
+ *   Sumar aquí obligaría a traer toda la historia de la tienda en cada
+ *   cierre, y la API corta en 1000 filas: a los pocos meses el arqueo
+ *   calcularía el esperado con datos parciales y marcaría faltantes que no
+ *   existen, sin dar ningún error. Postgres suma la columna entera sin ese
+ *   límite y sin mover los datos.
+ *
+ *   El saldo incluye toda la historia, no solo el día: el efectivo del cajón
+ *   viene arrastrado de ayer.
  */
 export function revelar(
-  movimientos: readonly Movimiento[],
+  saldos: ReadonlyMap<string, Pesos>,
   billeteras: readonly Billetera[],
   conteos: readonly ConteoArqueo[],
   umbral: Pesos = UMBRAL_DIFERENCIA_POR_DEFECTO,
 ): Arqueo {
-  const saldos = saldosPorBilletera(movimientos)
   const porBilletera = new Map(conteos.map((c) => [c.billeteraId, c]))
 
   const filas: FilaArqueo[] = billeteras

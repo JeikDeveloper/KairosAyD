@@ -13,7 +13,7 @@ import {
   type MotivoDiferencia,
   type TipoMovimiento,
 } from '@/dominio/tipos'
-import { billeteras as leerBilleteras, ajustesNegocio } from '@/lib/consultas'
+import { billeteras as leerBilleteras, ajustesNegocio, saldos } from '@/lib/consultas'
 import { clienteServidor, usuarioActual } from '@/lib/supabase/servidor'
 
 export interface ResultadoCaja {
@@ -88,16 +88,11 @@ export async function abrirCaja(
   // Si lo contado no coincide con lo que quedó ayer, la diferencia se
   // registra como ajuste ahora mismo: si se dejara pasar, el arqueo de la
   // noche marcaría un faltante que en realidad venía de la mañana.
-  const [listaBilleteras, mapaSaldos] = await Promise.all([
-    leerBilleteras(),
-    supabase.from('saldos_por_billetera').select('billetera_id, saldo'),
-  ])
+  const [listaBilleteras, mapaSaldos] = await Promise.all([leerBilleteras(), saldos()])
 
   const efectivo = listaBilleteras.find((b) => b.clase === 'efectivo')
   if (efectivo) {
-    const saldoPrevio = Number(
-      mapaSaldos.data?.find((f) => f.billetera_id === efectivo.id)?.saldo ?? 0,
-    )
+    const saldoPrevio = mapaSaldos.get(efectivo.id) ?? 0
     const diferencia = validado.data.conteo - saldoPrevio
 
     if (diferencia !== 0) {
@@ -158,10 +153,10 @@ export async function cerrarCaja(payload: unknown): Promise<ResultadoCaja> {
 
   if (!sesion) return { error: 'No hay ninguna caja abierta' }
 
-  const [listaBilleteras, ajustes, movimientos] = await Promise.all([
+  const [listaBilleteras, ajustes, mapaSaldos] = await Promise.all([
     leerBilleteras(),
     ajustesNegocio(),
-    supabase.from('movimientos').select('*').eq('estado', 'vigente'),
+    saldos(),
   ])
 
   const conteos: ConteoArqueo[] = validado.data.conteos.map((c) => ({
@@ -171,26 +166,7 @@ export async function cerrarCaja(payload: unknown): Promise<ResultadoCaja> {
     nota: c.nota,
   }))
 
-  const arqueo = revelar(
-    (movimientos.data ?? []).map((f) => ({
-      id: f.id,
-      sesionId: f.sesion_id,
-      tipo: f.tipo,
-      monto: f.monto,
-      billeteraId: f.billetera_id,
-      categoriaId: f.categoria_id,
-      nota: f.nota,
-      estado: f.estado,
-      grupoId: f.grupo_id,
-      corrigeA: f.corrige_a,
-      creadoEn: f.creado_en,
-      anuladoEn: f.anulado_en,
-      motivoAnulacion: f.motivo_anulacion,
-    })),
-    listaBilleteras,
-    conteos,
-    ajustes.umbralDiferencia,
-  )
+  const arqueo = revelar(mapaSaldos, listaBilleteras, conteos, ajustes.umbralDiferencia)
 
   // No se cierra con una diferencia sin explicar. «No sé qué pasó» es un
   // motivo válido; el silencio no. Un cierre que cuadra solo, en silencio,
@@ -288,29 +264,14 @@ export async function revelarDiferencias(conteos: unknown) {
   const validado = z.array(Conteo).safeParse(conteos)
   if (!validado.success) return null
 
-  const supabase = clienteServidor()
-  const [listaBilleteras, ajustes, movimientos] = await Promise.all([
+  const [listaBilleteras, ajustes, mapaSaldos] = await Promise.all([
     leerBilleteras(),
     ajustesNegocio(),
-    supabase.from('movimientos').select('*').eq('estado', 'vigente'),
+    saldos(),
   ])
 
   return revelar(
-    (movimientos.data ?? []).map((f) => ({
-      id: f.id,
-      sesionId: f.sesion_id,
-      tipo: f.tipo,
-      monto: f.monto,
-      billeteraId: f.billetera_id,
-      categoriaId: f.categoria_id,
-      nota: f.nota,
-      estado: f.estado,
-      grupoId: f.grupo_id,
-      corrigeA: f.corrige_a,
-      creadoEn: f.creado_en,
-      anuladoEn: f.anulado_en,
-      motivoAnulacion: f.motivo_anulacion,
-    })),
+    mapaSaldos,
     listaBilleteras,
     validado.data.map((c) => ({
       billeteraId: c.billeteraId,
