@@ -1,0 +1,762 @@
+<title>Cuadre Diario</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<style>
+:root{
+  --paper:#F5F7F2;
+  --surface:#FFFFFF;
+  --surface-2:#EDF1E9;
+  --ink:#161D18;
+  --ink-2:#4A554D;
+  --ink-3:#78837B;
+  --line:#D9E0D5;
+  --line-strong:#B8C4B4;
+  --green:#0F6B4F;
+  --green-soft:#DCEDE3;
+  --on-green:#FFFFFF;
+  --brick:#9E2F2B;
+  --brick-soft:#F6E2E0;
+  --gold:#8A6104;
+  --gold-soft:#F6ECD2;
+  --shadow:0 1px 2px rgba(22,29,24,.06),0 8px 24px -12px rgba(22,29,24,.18);
+
+  --f-xs:.75rem; --f-sm:.875rem; --f-base:1.0625rem; --f-lg:1.1875rem;
+  --f-xl:1.5rem; --f-2xl:2rem; --f-4xl:3.5rem;
+
+  --sans:"Archivo","Segoe UI",system-ui,sans-serif;
+  --serif:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --mono:"JetBrains Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#101310;
+    --surface:#181C18;
+    --surface-2:#1F241E;
+    --ink:#E7ECE4;
+    --ink-2:#AAB4A7;
+    --ink-3:#828D83;
+    --line:#2C332B;
+    --line-strong:#434C41;
+    --green:#5CBE93;
+    --green-soft:#1B3227;
+    --on-green:#0D1A14;
+    --brick:#E39089;
+    --brick-soft:#331D1B;
+    --gold:#D9AC55;
+    --gold-soft:#2E2612;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#101310;
+  --surface:#181C18;
+  --surface-2:#1F241E;
+  --ink:#E7ECE4;
+  --ink-2:#AAB4A7;
+  --ink-3:#828D83;
+  --line:#2C332B;
+  --line-strong:#434C41;
+  --green:#5CBE93;
+  --green-soft:#1B3227;
+  --on-green:#0D1A14;
+  --brick:#E39089;
+  --brick-soft:#331D1B;
+  --gold:#D9AC55;
+  --gold-soft:#2E2612;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 28px -14px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--serif);font-size:var(--f-base);line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px 96px}
+.col{max-width:68ch}
+
+/* ---------- cabecera ---------- */
+.masthead{border-bottom:1px solid var(--line);margin-bottom:56px;padding:56px 0 40px}
+.eyebrow{
+  font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.14em;
+  text-transform:uppercase;color:var(--ink-3);margin:0 0 20px
+}
+h1{
+  font-family:var(--sans);font-weight:800;font-size:clamp(2.75rem,7vw,var(--f-4xl));
+  line-height:1.02;letter-spacing:-.03em;margin:0 0 6px;text-wrap:balance
+}
+.subtitle{
+  font-family:var(--sans);font-weight:600;font-size:var(--f-xl);
+  color:var(--green);letter-spacing:-.015em;line-height:1.25;margin:0 0 24px;text-wrap:balance
+}
+.lede{font-size:var(--f-lg);color:var(--ink-2);max-width:60ch;margin:0 0 32px}
+.factbar{
+  display:flex;flex-wrap:wrap;gap:0;margin:0;
+  border-top:1px solid var(--line);border-left:1px solid var(--line)
+}
+.fact{
+  flex:1 1 170px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:12px 16px
+}
+.fact dt{
+  font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-3);margin:0 0 4px
+}
+.fact dd{margin:0;font-family:var(--sans);font-weight:600;font-size:var(--f-sm)}
+
+/* ---------- secciones ---------- */
+section{margin:0 0 76px}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin:0 0 10px;flex-wrap:wrap}
+.sec-tag{
+  font-family:var(--mono);font-size:var(--f-xs);letter-spacing:.12em;text-transform:uppercase;
+  color:var(--green);border:1px solid var(--line-strong);border-radius:2px;padding:3px 8px;
+  white-space:nowrap
+}
+h2{
+  font-family:var(--sans);font-weight:700;font-size:clamp(1.75rem,4vw,var(--f-2xl));
+  letter-spacing:-.025em;line-height:1.12;margin:0;text-wrap:balance
+}
+h3{
+  font-family:var(--sans);font-weight:700;font-size:var(--f-xl);letter-spacing:-.02em;
+  margin:46px 0 10px;text-wrap:balance
+}
+h4{
+  font-family:var(--sans);font-weight:700;font-size:var(--f-base);letter-spacing:-.005em;
+  margin:28px 0 6px
+}
+p{margin:0 0 16px}
+strong{font-weight:600}
+em{font-style:italic;color:var(--ink-2)}
+
+.why{
+  font-family:var(--sans);font-size:var(--f-sm);line-height:1.55;color:var(--ink-2);
+  border-left:2px solid var(--green);padding:2px 0 2px 14px;margin:0 0 20px;max-width:62ch
+}
+.why b{color:var(--green);font-weight:700}
+
+ul,ol{margin:0 0 18px;padding-left:22px;max-width:66ch}
+li{margin:0 0 8px}
+ul.tight li{margin:0 0 5px}
+
+/* ---------- avisos ---------- */
+.callout{
+  background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--green);
+  border-radius:3px;padding:20px 24px;margin:0 0 28px;box-shadow:var(--shadow);max-width:76ch
+}
+.callout.warn{border-left-color:var(--gold)}
+.callout.risk{border-left-color:var(--brick)}
+.callout > :last-child{margin-bottom:0}
+.callout-title{
+  font-family:var(--sans);font-weight:700;font-size:var(--f-sm);letter-spacing:.06em;
+  text-transform:uppercase;margin:0 0 8px;color:var(--green)
+}
+.callout.warn .callout-title{color:var(--gold)}
+.callout.risk .callout-title{color:var(--brick)}
+
+.supuesto{
+  display:inline-block;font-family:var(--mono);font-size:.6875rem;letter-spacing:.06em;
+  text-transform:uppercase;background:var(--gold-soft);color:var(--gold);
+  border:1px solid var(--gold);border-radius:2px;padding:0 6px;vertical-align:1px
+}
+
+/* ---------- tablas ---------- */
+.tablewrap{
+  overflow-x:auto;margin:0 0 28px;border:1px solid var(--line);
+  border-radius:3px;background:var(--surface)
+}
+table{border-collapse:collapse;width:100%;font-family:var(--sans);font-size:var(--f-sm);min-width:560px}
+th{
+  text-align:left;font-weight:700;font-size:var(--f-xs);letter-spacing:.09em;text-transform:uppercase;
+  color:var(--ink-2);padding:11px 16px;border-bottom:1px solid var(--line-strong);white-space:nowrap
+}
+td{padding:11px 16px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.5}
+tbody tr:nth-child(odd){background:var(--surface-2)}
+tbody tr:last-child td{border-bottom:0}
+.pill{
+  display:inline-block;font-family:var(--mono);font-size:.6875rem;letter-spacing:.05em;
+  text-transform:uppercase;border-radius:2px;padding:2px 7px;white-space:nowrap;font-weight:600;
+  background:var(--surface-2);color:var(--ink-2)
+}
+.pill.g{background:var(--green-soft);color:var(--green)}
+.pill.r{background:var(--brick-soft);color:var(--brick)}
+.pill.y{background:var(--gold-soft);color:var(--gold)}
+
+/* ---------- figuras ---------- */
+figure{margin:32px 0;padding:0}
+figure svg{display:block;width:100%;min-width:600px;height:auto;color:var(--ink)}
+.figbox{
+  background:var(--surface);border:1px solid var(--line);border-radius:3px;
+  padding:24px 20px;overflow-x:auto
+}
+figcaption{
+  font-family:var(--sans);font-size:var(--f-sm);color:var(--ink-2);
+  margin-top:12px;max-width:62ch;line-height:1.5
+}
+
+/* ---------- pasos ---------- */
+.steps{list-style:none;padding:0;margin:0;counter-reset:step;max-width:none}
+.step{
+  display:grid;grid-template-columns:46px 1fr;gap:20px;
+  border-top:1px solid var(--line);padding:24px 0;margin:0
+}
+.step:last-child{border-bottom:1px solid var(--line)}
+.step-n{
+  counter-increment:step;font-family:var(--mono);font-size:var(--f-sm);font-weight:600;
+  color:var(--green);padding-top:4px
+}
+.step-n::before{content:counter(step,decimal-leading-zero)}
+.step-b > :last-child{margin-bottom:0}
+.step-b h4{margin-top:0}
+
+/* ---------- maqueta de teléfono ---------- */
+.mockrow{display:grid;grid-template-columns:minmax(280px,336px) 1fr;gap:44px;align-items:start;margin:32px 0}
+@media (max-width:840px){.mockrow{grid-template-columns:1fr;gap:28px}}
+.phone{
+  background:var(--surface);border:1px solid var(--line-strong);border-radius:22px;
+  padding:9px;box-shadow:var(--shadow);font-family:var(--sans);max-width:336px
+}
+.screen{background:var(--paper);border-radius:14px;overflow:hidden}
+.p-status{
+  display:flex;align-items:center;gap:8px;padding:10px 14px;background:var(--green-soft);
+  font-size:var(--f-xs);color:var(--green);font-weight:600
+}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex:none}
+.p-body{padding:16px 14px 14px;display:flex;flex-direction:column;gap:14px}
+.p-hero-label{
+  font-family:var(--mono);font-size:.625rem;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 5px;line-height:1.3
+}
+.p-hero-num{
+  font-weight:800;font-size:2.375rem;letter-spacing:-.035em;
+  line-height:1;font-variant-numeric:tabular-nums;margin:0
+}
+.p-hero-note{font-size:.6875rem;color:var(--ink-3);margin:7px 0 0}
+.p-card{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px}
+.p-card-t{
+  font-family:var(--mono);font-size:.625rem;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 8px
+}
+.w-row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:5px 0;font-size:.8125rem}
+.w-row + .w-row{border-top:1px solid var(--line)}
+.w-row b{font-family:var(--mono);font-weight:600;font-variant-numeric:tabular-nums}
+.w-row.w-total{border-top:1px solid var(--line-strong);margin-top:3px;padding-top:8px;font-weight:700}
+.p-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.p-3 div{background:var(--surface);padding:9px 8px}
+.p-3 span{display:block;font-size:.5625rem;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);font-family:var(--mono);margin-bottom:3px}
+.p-3 b{font-family:var(--mono);font-size:.8125rem;font-variant-numeric:tabular-nums;font-weight:600}
+.mv{display:flex;justify-content:space-between;gap:10px;font-size:.8125rem;padding:6px 0}
+.mv + .mv{border-top:1px solid var(--line)}
+.mv small{display:block;color:var(--ink-3);font-size:.625rem;font-family:var(--mono);margin-top:1px}
+.mv b{font-family:var(--mono);font-variant-numeric:tabular-nums;font-weight:600;white-space:nowrap}
+.p-cta{
+  display:block;text-align:center;background:var(--green);color:var(--on-green);
+  border-radius:8px;padding:12px;font-weight:700;font-size:.9375rem;letter-spacing:-.01em
+}
+.p-tabs{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--line);background:var(--surface);align-items:end}
+.p-tab{text-align:center;padding:9px 2px 11px;font-size:.5625rem;font-family:var(--mono);letter-spacing:.03em;color:var(--ink-3)}
+.p-tab.on{color:var(--green);font-weight:600}
+.p-plus{
+  display:block;width:38px;height:38px;line-height:37px;border-radius:50%;background:var(--green);
+  color:var(--on-green);font-size:1.25rem;font-weight:700;margin:-14px auto 3px
+}
+.mock-note{font-family:var(--mono);font-size:var(--f-xs);color:var(--ink-3);margin:10px 0 0;text-align:center}
+
+/* ---------- jerarquía numerada ---------- */
+.rank{list-style:none;padding:0;margin:0;counter-reset:r}
+.rank li{
+  counter-increment:r;display:grid;grid-template-columns:26px 1fr;gap:14px;
+  padding:13px 0;border-top:1px solid var(--line);margin:0
+}
+.rank li:last-child{border-bottom:1px solid var(--line)}
+.rank li::before{
+  content:counter(r);font-family:var(--mono);font-weight:600;color:var(--green);
+  font-size:var(--f-sm);padding-top:3px
+}
+.rank b{font-family:var(--sans);display:block;font-size:var(--f-base);margin-bottom:2px;letter-spacing:-.01em}
+.rank span{font-size:var(--f-sm);color:var(--ink-2);font-family:var(--sans);line-height:1.5}
+
+/* ---------- preguntas ---------- */
+.qgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin:24px 0 0}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:3px;padding:20px}
+.q .qn{font-family:var(--mono);font-size:var(--f-xs);color:var(--green);letter-spacing:.1em;margin:0 0 10px}
+.q .qq{font-family:var(--sans);font-weight:700;font-size:var(--f-lg);letter-spacing:-.015em;margin:0 0 8px;line-height:1.25}
+.q .qw{font-family:var(--sans);font-size:var(--f-sm);color:var(--ink-2);margin:0;line-height:1.55}
+
+footer{border-top:1px solid var(--line);padding-top:24px;color:var(--ink-3);font-family:var(--sans);font-size:var(--f-sm)}
+</style>
+
+<div class="wrap">
+
+<header class="masthead">
+  <p class="eyebrow">Especificación de diseño · v0.1 · Borrador para discusión</p>
+  <h1>Cuadre Diario</h1>
+  <p class="subtitle">El libro de caja de la tienda, sin descuadres al cerrar</p>
+  <p class="lede">Navegación, tablero principal, flujo de cierre de caja y los controles que evitan que la plata se pierda sin que nadie se dé cuenta. <em>«Cuadre Diario» es un nombre de trabajo; cámbialo cuando quieras.</em></p>
+  <dl class="factbar">
+    <div class="fact"><dt>Negocio</dt><dd>Tienda de barrio</dd></div>
+    <div class="fact"><dt>Usuario</dt><dd>El dueño, solo él</dd></div>
+    <div class="fact"><dt>Dispositivo</dt><dd>Móvil primero, escritorio después</dd></div>
+    <div class="fact"><dt>Moneda</dt><dd>Peso colombiano (COP)</dd></div>
+    <div class="fact"><dt>Medios de pago</dt><dd>Efectivo · Nequi · Daviplata · Transferencia</dd></div>
+    <div class="fact"><dt>Fiado</dt><dd>No se fía</dd></div>
+    <div class="fact"><dt>Ganancia</dt><dd>Ventas menos gastos, sin costo de mercancía</dd></div>
+    <div class="fact"><dt>Arqueo</dt><dd>Uno por día, sin turnos</dd></div>
+  </dl>
+</header>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">Punto de partida</span><h2>Esto no es un punto de venta. Es un libro de caja con varias billeteras.</h2></div>
+  <div class="col">
+    <p>Toda la app se sostiene sobre una sola idea: <strong>existe un único tipo de registro, el movimiento</strong>, y cada movimiento entra o sale de <strong>una billetera</strong> (efectivo, Nequi, Daviplata, transferencia). Nada más. Los saldos y los reportes no se guardan: se calculan sumando movimientos.</p>
+    <p class="why"><b>Por qué:</b> si el saldo es un número editable, tarde o temprano alguien lo «arregla» y se pierde el rastro. Si el saldo es la suma de los movimientos, un saldo equivocado siempre tiene detrás un movimiento equivocado — y se puede encontrar.</p>
+    <p>La consecuencia práctica: <strong>en ninguna pantalla debe existir un campo «saldo» que se pueda escribir a mano.</strong> Corregir un saldo se hace registrando un movimiento de ajuste con su motivo, nunca sobrescribiendo.</p>
+  </div>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:24%">Un movimiento tiene</th><th style="width:36%">Ejemplo</th><th>Regla</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Fecha y hora</strong></td><td>23/08/2026 · 4:12 p.m.</td><td>La pone el sistema, no el usuario</td></tr>
+        <tr><td><strong>Tipo</strong></td><td>Venta · Gasto · Compra · Retiro · Aporte · Traslado · Ajuste</td><td>Define si suma o resta</td></tr>
+        <tr><td><strong>Monto</strong></td><td>$12.000</td><td>Siempre positivo; el tipo define el signo</td></tr>
+        <tr><td><strong>Billetera</strong></td><td>Efectivo</td><td>Obligatoria, sin valor por defecto oculto</td></tr>
+        <tr><td><strong>Categoría</strong></td><td>Bebidas · Arriendo · Servicios…</td><td>Obligatoria en gastos, opcional en ventas</td></tr>
+        <tr><td><strong>Nota</strong></td><td>«Le fié a doña Rosa»</td><td>Opcional, salvo en ajustes y diferencias</td></tr>
+        <tr><td><strong>Estado</strong></td><td>Vigente · Anulado</td><td>Nunca se borra: se anula y queda el rastro</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout warn">
+    <p class="callout-title">Un caso especial: el traslado</p>
+    <p>Cuando el dueño saca plata de Nequi y la mete al cajón, <strong>eso no es un ingreso ni un gasto</strong>: es un traslado entre billeteras. Si se registra como ingreso, las ventas del mes salen infladas. Debe ser un tipo propio, que en un solo registro resta de una billetera y suma en otra.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">Tarea 1</span><h2>Estructura de navegación</h2></div>
+  <div class="col">
+    <p>Cinco destinos en móvil, ni uno más. Con un solo usuario de nivel técnico bajo, cada pestaña extra es una decisión que hay que tomar veinte veces al día.</p>
+  </div>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:13%">Pestaña</th><th style="width:29%">Para qué se entra</th><th>Qué contiene</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Hoy</strong></td><td>«¿Cómo va el día? ¿Cuánta plata tengo?»</td><td>Estado de la caja, efectivo esperado en el cajón, saldo por billetera, entró/salió, últimos movimientos, botón de cerrar caja</td></tr>
+        <tr><td><strong>Caja</strong></td><td>«Voy a abrir, arquear o cerrar»</td><td>Abrir caja con base · Arqueo intermedio · Cerrar el día · Historial de cierres con sus diferencias. Un solo ciclo por día: sin turnos ni responsables</td></tr>
+        <tr><td><strong>Registrar</strong></td><td>«Acabo de vender / de gastar»</td><td>Botón central elevado. No es una pantalla: abre una hoja con Venta · Gasto · Compra · Retiro · Aporte · Traslado</td></tr>
+        <tr><td><strong>Reportes</strong></td><td>«¿Cómo me fue esta semana?»</td><td>Ventas por día/semana/mes · Gastos por categoría · Neto del periodo · Comparativo con el periodo anterior</td></tr>
+        <tr><td><strong>Más</strong></td><td>«Configurar algo» (poco frecuente)</td><td>Categorías · Billeteras · Respaldo y exportar · Umbral de diferencia aceptable · Ajustes</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>Movimientos no es una pestaña</h3>
+  <div class="col">
+    <p>El historial completo es una pantalla real, con filtros por fecha, tipo, billetera y categoría — pero no ocupa un espacio en la barra. Se llega a él <strong>desde el dato que uno estaba mirando</strong>.</p>
+    <p class="why"><b>Por qué:</b> nadie abre el historial en frío; se abre porque una cifra no cuadra. Si se llega tocando esa cifra, la lista ya viene filtrada por lo que el dueño quería ver, y se ahorran tres pasos de filtrado manual — que es justo donde un usuario de nivel bajo se pierde.</p>
+  </div>
+
+  <figure>
+    <div class="figbox">
+      <svg viewBox="0 0 760 296" role="img" aria-label="Cinco pestañas en la barra inferior; tres de ellas llevan a una única pantalla de Movimientos que llega ya filtrada">
+        <defs>
+          <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+          </marker>
+        </defs>
+        <g font-family="Archivo, sans-serif" font-size="12.5" fill="currentColor">
+          <text x="26" y="20" font-size="10.5" font-family="JetBrains Mono, monospace" letter-spacing="1.2" opacity=".6">BARRA INFERIOR (MÓVIL)</text>
+
+          <g stroke="currentColor" stroke-width="1.25" fill="none">
+            <rect x="26" y="32" width="132" height="50" rx="4"/>
+            <rect x="170" y="32" width="132" height="50" rx="4"/>
+            <rect x="458" y="32" width="132" height="50" rx="4"/>
+            <rect x="602" y="32" width="132" height="50" rx="4"/>
+          </g>
+          <rect x="314" y="32" width="132" height="50" rx="4" fill="currentColor"/>
+
+          <text x="92"  y="62" text-anchor="middle" font-weight="700">Hoy</text>
+          <text x="236" y="62" text-anchor="middle" font-weight="700">Caja</text>
+          <text x="380" y="62" text-anchor="middle" font-weight="700" fill="var(--surface)">+  Registrar</text>
+          <text x="524" y="62" text-anchor="middle" font-weight="700">Reportes</text>
+          <text x="668" y="62" text-anchor="middle" font-weight="700">Más</text>
+
+          <g stroke="currentColor" stroke-width="1.25" fill="none" marker-end="url(#ar)" opacity=".6">
+            <polyline points="92,82 92,122 328,122 328,208"/>
+            <polyline points="236,82 236,150 368,150 368,208"/>
+            <polyline points="524,82 524,178 432,178 432,208"/>
+          </g>
+
+          <g font-size="11" opacity=".72" font-family="JetBrains Mono, monospace">
+            <text x="102" y="108">«ver todos»</text>
+            <text x="246" y="136">movimientos del turno</text>
+            <text x="446" y="164">tocar cualquier cifra</text>
+          </g>
+
+          <rect x="238" y="210" width="284" height="58" rx="4" stroke="currentColor" stroke-width="1.75" fill="none"/>
+          <text x="380" y="235" text-anchor="middle" font-weight="700" font-size="14">Movimientos</text>
+          <text x="380" y="253" text-anchor="middle" font-size="10.5" opacity=".68" font-family="JetBrains Mono, monospace">ya filtrada por lo que venías mirando</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption>Tres caminos entran a la misma pantalla de historial, cada uno con su filtro ya aplicado. Ninguno obliga a configurar el filtro a mano.</figcaption>
+  </figure>
+
+  <h3>En escritorio</h3>
+  <div class="col">
+    <p>Misma información, distinta forma: barra lateral izquierda fija con los cinco destinos <strong>más «Movimientos» ya visible</strong> — en pantalla ancha deja de competir por espacio — y un botón <em>Registrar</em> primario arriba a la derecha, siempre presente.</p>
+    <p>El escritorio gana dos cosas que el móvil no debe intentar: <strong>tablas anchas</strong> (el historial con todas sus columnas y la exportación a Excel) y <strong>el cierre de caja lado a lado</strong>, con el conteo a la izquierda y el resumen del día a la derecha. Todo lo demás es la misma app.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">Tarea 2</span><h2>Tablero principal: la pantalla «Hoy»</h2></div>
+
+  <div class="col">
+    <h4>Objetivo</h4>
+    <p>Responder en menos de tres segundos y sin tocar nada: <strong>¿cuánta plata debería haber ahora mismo, y dónde está?</strong></p>
+    <h4>Dato principal</h4>
+    <p><strong>El efectivo que debe haber en el cajón.</strong> No las ventas del día.</p>
+    <p class="why"><b>Por qué:</b> las ventas del día son un número que no se puede verificar contra nada. El efectivo esperado sí — el dueño abre el cajón, cuenta y en diez segundos sabe si algo anda mal. Es el único indicador que convierte la app en un control real y no en un diario.</p>
+  </div>
+
+  <div class="mockrow">
+    <div>
+      <div class="phone">
+        <div class="screen">
+          <div class="p-status"><span class="dot"></span> Caja abierta 6:12 a.m. · base $100.000</div>
+          <div class="p-body">
+            <div>
+              <p class="p-hero-label">Efectivo que debe haber en el cajón</p>
+              <p class="p-hero-num">$487.300</p>
+              <p class="p-hero-note">Último arqueo: ayer 8:40 p.m. · cuadró</p>
+            </div>
+
+            <div class="p-card">
+              <p class="p-card-t">Dónde está la plata</p>
+              <div class="w-row"><span>Efectivo</span><b>$487.300</b></div>
+              <div class="w-row"><span>Nequi</span><b>$212.500</b></div>
+              <div class="w-row"><span>Daviplata</span><b>$64.000</b></div>
+              <div class="w-row"><span>Transferencia</span><b>$0</b></div>
+              <div class="w-row w-total"><span>Total</span><b>$763.800</b></div>
+            </div>
+
+            <div class="p-3">
+              <div><span>Entró</span><b>792.300</b></div>
+              <div><span>Salió</span><b>128.500</b></div>
+              <div><span>Neto</span><b>+663.800</b></div>
+            </div>
+
+            <div class="p-card">
+              <p class="p-card-t">Últimos movimientos</p>
+              <div class="mv"><span>Venta<small>Nequi · 4:12 p.m.</small></span><b>+12.000</b></div>
+              <div class="mv"><span>Compra gaseosas<small>Efectivo · 3:40 p.m.</small></span><b>−96.000</b></div>
+              <div class="mv"><span>Venta<small>Efectivo · 3:31 p.m.</small></span><b>+7.500</b></div>
+            </div>
+
+            <span class="p-cta">Cerrar caja del día</span>
+          </div>
+          <div class="p-tabs">
+            <div class="p-tab on">Hoy</div>
+            <div class="p-tab">Caja</div>
+            <div class="p-tab"><span class="p-plus">+</span></div>
+            <div class="p-tab">Reportes</div>
+            <div class="p-tab">Más</div>
+          </div>
+        </div>
+      </div>
+      <p class="mock-note">cifras de ejemplo, no reales</p>
+    </div>
+
+    <div>
+      <h4 style="margin-top:0">Jerarquía, de arriba abajo</h4>
+      <ol class="rank">
+        <li><b>Estado de la caja</b><span>Abierta o cerrada, desde qué hora, con qué base. Si está cerrada, esta franja se convierte en el botón «Abrir caja» y bloquea el resto: no se registra nada sin caja abierta.</span></li>
+        <li><b>Efectivo esperado en el cajón</b><span>El número más grande de la pantalla. Verificable a mano en este mismo instante.</span></li>
+        <li><b>Saldo por billetera</b><span>Efectivo, Nequi, Daviplata, transferencia y el total. Responde «¿dónde está?», que es lo que el total por sí solo no dice.</span></li>
+        <li><b>Entró · Salió · Neto</b><span>Tres cifras en fila. Se llama <em>neto</em>, nunca <em>utilidad</em>: no se está descontando lo que costó la mercancía.</span></li>
+        <li><b>Últimos movimientos</b><span>Cinco, con hora y billetera. Sirve para cazar el error reciente: «esa venta la cobré por Nequi, no en efectivo».</span></li>
+        <li><b>Cerrar caja del día</b><span>Acción principal, fija abajo. Siempre visible; después de las 6 p.m. se resalta.</span></li>
+      </ol>
+      <p class="why" style="margin-top:22px"><b>Por qué este orden:</b> va de lo que se puede verificar ahora mismo a lo que hay que interpretar. La app se abre veinte veces al día por los puntos 1 a 3, y una sola vez al día por el resto.</p>
+    </div>
+  </div>
+
+  <h3>Lo que deliberadamente <em>no</em> va en «Hoy»</h3>
+  <div class="col">
+    <ul>
+      <li><strong>Cualquier cosa llamada «utilidad» o «ganancia».</strong> Como no se registra el costo de la mercancía, ese número no existe en esta app. Un número de ganancia mal calculado en la pantalla principal es peor que no tenerlo: el dueño toma decisiones con él.</li>
+      <li><strong>Gráficos de tendencia.</strong> Una curva de siete días no cambia ninguna decisión de hoy.</li>
+      <li><strong>Metas y porcentajes de crecimiento.</strong> Ruido en una pantalla operativa.</li>
+    </ul>
+  </div>
+
+  <h3>Estados de la pantalla</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:18%">Estado</th><th>Qué se ve</th></tr></thead>
+      <tbody>
+        <tr><td><span class="pill y">Vacío</span></td><td><strong>Día sin abrir:</strong> franja superior en ámbar, «La caja está cerrada», botón grande «Abrir caja» y el campo de base con lo que quedó ayer ya precargado. El resto de la pantalla se ve atenuado, no oculto: se ve lo que va a haber.<br><strong>Caja abierta sin movimientos:</strong> se muestra la base y «Todavía no has registrado nada hoy», con el botón + señalado. Nunca una pantalla en blanco.</td></tr>
+        <tr><td><span class="pill">Cargando</span></td><td>Bloques del tamaño final en gris, con la estructura ya visible. <strong>Nunca un giro de carga sobre toda la pantalla, y nunca un $0 mientras carga</strong>: un cero falso hace creer que se perdieron los datos.</td></tr>
+        <tr><td><span class="pill r">Error</span></td><td>Franja roja arriba: «No se pudo actualizar. Estás viendo los datos de las 4:12 p.m.», con botón «Reintentar». <strong>Se sigue mostrando el último dato conocido con su hora</strong> en vez de vaciar la pantalla.</td></tr>
+        <tr><td><span class="pill r">Sin internet</span></td><td>«Sin conexión: se guardó en el teléfono y se enviará solo». Los registros se siguen aceptando. Un contador de «3 movimientos por enviar» y un aviso claro si algo lleva más de un día sin sincronizar.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout risk">
+    <p class="callout-title">Riesgo de control interno</p>
+    <p>En una tienda de barrio la venta se registra <em>justo después</em> de cobrar, o no se registra. Si la app tarda más de <strong>cinco segundos y tres toques</strong> en registrar una venta en efectivo, en las horas pico van a quedar ventas sin registrar — y al cerrar va a <strong>sobrar</strong> plata en el cajón, que es tan grave como que falte: en ambos casos el dueño deja de confiar en el número y la app se muere. El botón <strong>+</strong> debe llegar a «venta en efectivo registrada» con monto, billetera por defecto y guardar, sin pantallas intermedias.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">Tarea 3</span><h2>Flujo de cierre de caja</h2></div>
+
+  <div class="col">
+    <p>Este es el flujo más importante de la app y el más fácil de arruinar. Todo su valor depende de una sola regla.</p>
+  </div>
+
+  <div class="callout">
+    <p class="callout-title">La regla que sostiene todo el arqueo</p>
+    <p><strong>Se cuenta primero, y solo después la app muestra cuánto debería haber.</strong> Si la pantalla dice «deben haber $487.300» antes de contar, el dueño va a contar hasta que le dé esa cifra. El arqueo deja de medir nada y se vuelve un trámite.</p>
+  </div>
+
+  <figure>
+    <div class="figbox">
+      <svg viewBox="0 0 760 300" role="img" aria-label="Comparación: mostrar el esperado antes de contar produce un cuadre falso; contar a ciegas y revelar después produce una diferencia real">
+        <defs>
+          <marker id="ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="currentColor"/>
+          </marker>
+        </defs>
+        <g font-family="Archivo, sans-serif" font-size="12" fill="currentColor">
+
+          <g opacity=".55">
+            <text x="30" y="22" font-size="10.5" font-family="JetBrains Mono, monospace" letter-spacing="1.1">SI LA APP MUESTRA EL ESPERADO PRIMERO</text>
+            <g stroke="currentColor" stroke-width="1.25" fill="none" stroke-dasharray="4 3">
+              <rect x="30" y="36" width="152" height="56" rx="4"/>
+              <rect x="212" y="36" width="152" height="56" rx="4"/>
+              <rect x="394" y="36" width="152" height="56" rx="4"/>
+            </g>
+            <rect x="576" y="36" width="152" height="56" rx="4" stroke="currentColor" stroke-width="2" fill="none"/>
+            <g stroke="currentColor" stroke-width="1.25" fill="none" marker-end="url(#ar2)">
+              <line x1="182" y1="64" x2="206" y2="64"/>
+              <line x1="364" y1="64" x2="388" y2="64"/>
+              <line x1="546" y1="64" x2="570" y2="64"/>
+            </g>
+            <text x="106" y="60" text-anchor="middle">Ve «deben haber</text>
+            <text x="106" y="76" text-anchor="middle">$487.300»</text>
+            <text x="288" y="60" text-anchor="middle">Cuenta el</text>
+            <text x="288" y="76" text-anchor="middle">efectivo</text>
+            <text x="470" y="60" text-anchor="middle">Recuenta hasta</text>
+            <text x="470" y="76" text-anchor="middle">que dé esa cifra</text>
+            <text x="652" y="60" text-anchor="middle" font-weight="700">Cuadre falso</text>
+            <text x="652" y="77" text-anchor="middle" font-size="10.5" font-family="JetBrains Mono, monospace">el faltante sigue ahí</text>
+          </g>
+
+          <line x1="30" y1="130" x2="730" y2="130" stroke="currentColor" stroke-width="1" opacity=".2"/>
+
+          <g>
+            <text x="30" y="176" font-size="10.5" font-family="JetBrains Mono, monospace" letter-spacing="1.1" opacity=".65">SI EL CONTEO VA PRIMERO</text>
+            <g stroke="currentColor" stroke-width="1.25" fill="none">
+              <rect x="30" y="190" width="152" height="56" rx="4"/>
+              <rect x="212" y="190" width="152" height="56" rx="4"/>
+              <rect x="394" y="190" width="152" height="56" rx="4"/>
+              <rect x="576" y="190" width="152" height="56" rx="4" stroke-width="2.5"/>
+            </g>
+            <g stroke="currentColor" stroke-width="1.25" fill="none" marker-end="url(#ar2)">
+              <line x1="182" y1="218" x2="206" y2="218"/>
+              <line x1="364" y1="218" x2="388" y2="218"/>
+              <line x1="546" y1="218" x2="570" y2="218"/>
+            </g>
+            <text x="106" y="214" text-anchor="middle">Cuenta sin ver</text>
+            <text x="106" y="230" text-anchor="middle">ninguna cifra</text>
+            <text x="288" y="214" text-anchor="middle">Escribe lo</text>
+            <text x="288" y="230" text-anchor="middle">que contó</text>
+            <text x="470" y="214" text-anchor="middle">La app revela</text>
+            <text x="470" y="230" text-anchor="middle">la diferencia</text>
+            <text x="652" y="214" text-anchor="middle" font-weight="700">Diferencia real</text>
+            <text x="652" y="231" text-anchor="middle" font-size="10.5" font-family="JetBrains Mono, monospace">con motivo obligatorio</text>
+          </g>
+
+          <text x="30" y="284" font-size="10.5" font-family="JetBrains Mono, monospace" opacity=".6">Lo único que cambia entre las dos filas es el orden de dos pasos.</text>
+        </g>
+      </svg>
+    </div>
+    <figcaption>El mismo dueño, la misma plata, el mismo esfuerzo. Lo único que cambia es si el número esperado aparece antes o después del conteo, y esa decisión determina si el arqueo detecta faltantes o los esconde.</figcaption>
+  </figure>
+
+  <h3>Los siete pasos</h3>
+
+  <ol class="steps">
+    <li class="step">
+      <span class="step-n"></span>
+      <div class="step-b">
+        <h4>¿Falta registrar algo?</h4>
+        <p>Dos preguntas de sí o no, grandes, una debajo de otra: <em>¿Pagaste algo con la plata del cajón? · ¿Le compraste a un proveedor?</em> Cada «sí» abre el registro correspondiente y devuelve al cierre en el mismo punto.</p>
+        <p class="why"><b>Por qué:</b> la mayoría de los descuadres no son robos, son movimientos que nunca se registraron. Preguntarlo aquí cuesta diez segundos y elimina la causa número uno de diferencias.</p>
+      </div>
+    </li>
+    <li class="step">
+      <span class="step-n"></span>
+      <div class="step-b">
+        <h4>Contar el efectivo, a ciegas</h4>
+        <p>Campo vacío, teclado numérico grande y <strong>ninguna cifra esperada visible en ninguna parte de la pantalla</strong>: tampoco en una franja superior ni en un resumen lateral. Opcional y recomendado: desglose por denominación (cuántos de $50.000, de $20.000, de $10.000…) que suma solo.</p>
+        <p class="why"><b>Por qué el desglose:</b> contar por denominación reduce el error de conteo y, cuando hay faltante, dice <em>qué</em> falta. Un billete de $50.000 y veinte monedas de $500 cuentan historias muy distintas.</p>
+      </div>
+    </li>
+    <li class="step">
+      <span class="step-n"></span>
+      <div class="step-b">
+        <h4>Confirmar los saldos digitales</h4>
+        <p>Una pantalla por billetera activa: «Abre Nequi y escribe el saldo que ves». También a ciegas.</p>
+        <p class="why"><b>Por qué:</b> es donde se descubre el error de billetera — cobró por Nequi y lo registró como efectivo. El total del día cuadra, pero cada billetera está mal, y eso solo aparece si se arquean por separado.</p>
+      </div>
+    </li>
+    <li class="step">
+      <span class="step-n"></span>
+      <div class="step-b">
+        <h4>La revelación</h4>
+        <p>Ahora sí, tres columnas por billetera: <strong>esperado · contado · diferencia</strong>, con semáforo por fila:</p>
+        <ul class="tight">
+          <li><span class="pill g">Cuadra</span> &nbsp;diferencia $0</li>
+          <li><span class="pill y">Diferencia menor</span> &nbsp;dentro del umbral configurable <span class="supuesto">supuesto: $2.000</span>, típicamente sencillo y redondeos</li>
+          <li><span class="pill r">Revisar</span> &nbsp;por encima del umbral</li>
+        </ul>
+        <p>La fila en rojo ofrece <strong>«Ver los movimientos de esta billetera hoy»</strong>, para buscar el error antes de aceptar la diferencia.</p>
+      </div>
+    </li>
+    <li class="step">
+      <span class="step-n"></span>
+      <div class="step-b">
+        <h4>Explicar la diferencia (obligatorio)</h4>
+        <p>Si hay diferencia, no se puede continuar sin elegir un motivo: <em>Di mal el cambio · Sobró sencillo · Se me olvidó registrar una venta · Escribí mal un monto · No sé qué pasó</em>, más una nota libre.</p>
+        <p class="why"><b>Por qué obligatorio:</b> «No sé qué pasó» es una respuesta válida y valiosa. Lo que no puede ocurrir es que la app cuadre sola en silencio. Tres «no sé qué pasó» seguidos en la misma billetera son un patrón que hay que poder ver en el historial.</p>
+        <p>La diferencia se registra como un <strong>movimiento de ajuste visible</strong>, con su motivo. No se «corrige» el saldo por detrás.</p>
+      </div>
+    </li>
+    <li class="step">
+      <span class="step-n"></span>
+      <div class="step-b">
+        <h4>Resumen y confirmación</h4>
+        <p>Una sola pantalla: vendido, gastado, neto y diferencias por billetera. Botón «Cerrar el día» y, antes de confirmar, un aviso claro: <strong>«Después de cerrar, los movimientos de hoy no se pueden editar»</strong>.</p>
+      </div>
+    </li>
+    <li class="step">
+      <span class="step-n"></span>
+      <div class="step-b">
+        <h4>Dejar la base de mañana</h4>
+        <p>«¿Cuánto efectivo dejas en el cajón para mañana?» El resto se registra automáticamente como <strong>retiro</strong> hacia una billetera «Caja fuerte / personal».</p>
+        <p class="why"><b>Por qué este paso existe:</b> es el momento en que la plata sale del negocio. Si no se registra aquí, mañana el efectivo esperado va a estar inflado y el arqueo va a marcar un faltante que no es tal. Es el paso que más se olvidaría si fuera opcional — por eso va dentro del cierre y no fuera.</p>
+      </div>
+    </li>
+  </ol>
+
+  <h3>Después de cerrar</h3>
+  <div class="col">
+    <ul>
+      <li><strong>El día queda bloqueado.</strong> Nada se edita ni se borra.</li>
+      <li><strong>Las correcciones se hacen con un movimiento de ajuste</strong> con fecha de hoy, que apunta al movimiento original y lleva nota obligatoria. El original sigue visible, marcado como corregido.</li>
+      <li><strong>Reabrir el día es posible, pero deja rastro:</strong> queda registrado cuándo se reabrió y qué cambió. Con un solo usuario esto parece innecesario; no lo es. Sirve el día que el dueño no recuerde qué tocó, y sirve el día que contrate a alguien.</li>
+    </ul>
+  </div>
+
+  <h3>Estados del flujo de cierre</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:24%">Situación</th><th>Comportamiento</th></tr></thead>
+      <tbody>
+        <tr><td><span class="pill y">Cerrar sin movimientos</span></td><td>Se permite, pero pide confirmación: «Hoy no registraste ninguna venta. ¿Cerramos así?». Un día sin ventas es información; un día sin registrar es un error.</td></tr>
+        <tr><td><span class="pill">A medio camino</span></td><td>El cierre se guarda paso a paso. Si se cierra la app o se acaba la batería, al volver retoma donde iba: <strong>el conteo ya escrito no se pierde ni se vuelve a pedir</strong>.</td></tr>
+        <tr><td><span class="pill r">Sin conexión</span></td><td>El cierre se completa entero contra los datos del teléfono y queda «pendiente de enviar». No se bloquea por falta de internet: la tienda cierra igual.</td></tr>
+        <tr><td><span class="pill r">Se olvidó cerrar ayer</span></td><td>Al abrir la app: «La caja del 22/08 quedó abierta». Ofrece cerrarla con fecha de ayer y avisa que ese conteo será menos confiable. <strong>Nunca cierra sola en silencio</strong> y no deja abrir el día nuevo hasta resolverlo.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">Tarea 4</span><h2>La revisión de usabilidad queda pendiente</h2></div>
+  <div class="col">
+    <p>Pediste que revisara una pantalla, pero no llegó ninguna. Cuando la mandes — captura, código, boceto en papel o incluso una descripción en palabras — la reviso.</p>
+    <p>Para que la revisión sirva, mándala con tres cosas: <strong>qué debe lograr el usuario en esa pantalla</strong>, <strong>de dónde viene</strong> y <strong>a dónde va después</strong>. Sin eso solo puedo opinar de tipografía y espaciado, que es la parte menos importante.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">Sin que lo pidieras</span><h2>Los siete descuadres que va a tener esta tienda</h2></div>
+  <div class="col">
+    <p>Ordenados por qué tan seguido pasan en una tienda de barrio, con la defensa que le corresponde a cada uno en el diseño.</p>
+  </div>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:26%">Cómo se pierde la plata</th><th style="width:30%">Qué se ve</th><th>Defensa en la app</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Nequi personal mezclado con el del negocio</strong></td><td>Imposible conciliar: el saldo de la app nunca coincide con el del banco.</td><td>Si el número de teléfono es el mismo, el arqueo digital no sirve. <strong>Recomendación fuerte: una cuenta aparte para el negocio.</strong> Mientras tanto, marcar esa billetera como «mezclada» y no exigirle cuadre exacto — mejor eso que un rojo permanente que el dueño aprende a ignorar.</td></tr>
+        <tr><td><strong>El dueño saca plata del cajón</strong></td><td>Faltante sin explicación, casi a diario.</td><td>Botón «Retiro» en el mismo nivel que «Venta»: fácil de registrar, no escondido en un submenú.</td></tr>
+        <tr><td><strong>Billetera equivocada</strong></td><td>El total cuadra, pero efectivo y Nequi están cruzados.</td><td>Arqueo separado por billetera (paso 3). Sin eso, este error es invisible.</td></tr>
+        <tr><td><strong>Le pagó al proveedor con la plata del día</strong></td><td>Parece que vendió menos de lo que vendió.</td><td>Tipo «Compra» separado de «Gasto», con la billetera de la que salió. Pregunta obligatoria en el cierre.</td></tr>
+        <tr><td><strong>La base de apertura no se registra</strong></td><td>El primer arqueo da un sobrante igual a la base.</td><td>No se puede registrar nada sin abrir caja con base, y la de ayer viene precargada.</td></tr>
+        <tr><td><strong>Ventas no registradas en hora pico</strong></td><td>Sobra plata en el cajón.</td><td>Registro de venta en efectivo en tres toques. Un sobrante repetido en el historial debería generar un aviso, no pasar en silencio.</td></tr>
+        <tr><td><strong>Creer que el neto es la ganancia</strong></td><td>Se gasta la plata con la que hay que reponer mercancía.</td><td>Como no se registra el costo, la palabra «utilidad» no aparece en ninguna parte de la app. Se llama <strong>neto</strong>, y Reportes lo explica en una línea: «esto todavía incluye la plata de reponer lo que vendiste».</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout warn">
+    <p class="callout-title">Lo que hay que vigilar: el fiado que empieza solo</p>
+    <p>Diseñamos sin fiado porque hoy no se fía. En la práctica, el fiado en una tienda de barrio no se decide: empieza un día con un vecino y a los tres meses son ocho. Si eso pasa, se va a ver como <strong>un faltante de efectivo repetido y sin explicación</strong>, y el dueño va a echarle la culpa a la app.</p>
+    <p>La defensa barata, que sí conviene dejar puesta desde el principio: cuando en el paso 5 se elija dos veces seguidas <em>«No sé qué pasó»</em> por un faltante, la app pregunta una sola vez <strong>«¿Le estás fiando a alguien?»</strong>. Si la respuesta es sí, se activa el módulo de fiado. Mientras tanto, no cuesta nada tenerlo apagado.</p>
+  </div>
+
+  <div class="callout risk">
+    <p class="callout-title">El riesgo estructural: un solo usuario</p>
+    <p>Con el dueño como único usuario <strong>no hay separación de funciones</strong>: la misma persona vende, registra, cuenta y aprueba la diferencia. Ningún diseño resuelve eso, pero sí puede compensarlo con tres piezas: <strong>el conteo a ciegas</strong> (no se puede ajustar a un número que no se ve), <strong>el registro inmutable</strong> (todo cambio queda con fecha y hora) y <strong>el historial de diferencias</strong> (un patrón de faltantes se ve, aunque cada uno por separado parezca inocente). El día que la tienda tenga un empleado, esas tres piezas ya están puestas y solo hay que agregar usuarios.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="sec-tag">Decidido</span><h2>Tres decisiones que recortaron la mitad de la app</h2></div>
+  <div class="col">
+    <p>Las tres respuestas apuntan en la misma dirección: <strong>esto es un libro de caja puro</strong>. Sin clientes, sin productos, sin usuarios, sin turnos. Cuatro entidades en total — movimiento, billetera, categoría y cierre de caja — y ninguna relación complicada entre ellas. Es una app que una persona puede construir y, más importante, que una persona puede usar todos los días sin cansarse.</p>
+  </div>
+  <div class="qgrid">
+    <div class="q">
+      <p class="qn">01 · NO SE FÍA</p>
+      <p class="qq">Fuera la entidad «cliente»</p>
+      <p class="qw">Toda venta entra a una billetera en el momento. No hay cuentas por cobrar, ni abonos parciales, ni saldos de vecinos. Se cae la pantalla de fiados, una pregunta del cierre y una tarjeta del tablero. <strong>Queda vigilado</strong> por si empieza a pasar sin avisar.</p>
+    </div>
+    <div class="q">
+      <p class="qn">02 · VENTAS MENOS GASTOS</p>
+      <p class="qq">Fuera el catálogo de productos</p>
+      <p class="qw">No hay que registrar <em>qué</em> se vendió, solo cuánto entró y por dónde. Una venta se registra en tres toques. El precio: la app nunca podrá decir cuánto se gana de verdad — por eso el número se llama <strong>neto</strong> y en Reportes lleva su advertencia.</p>
+    </div>
+    <div class="q">
+      <p class="qn">03 · SIEMPRE EL DUEÑO</p>
+      <p class="qq">Fuera turnos y usuarios</p>
+      <p class="qw">Un ciclo abrir–cerrar por día, sin responsable ni traspaso de caja. Sin login ni permisos. El historial sigue siendo inmutable y con fecha y hora: si algún día entra un empleado, se agregan usuarios encima sin rehacer nada.</p>
+    </div>
+  </div>
+
+  <h3>Con eso, lo primero que hay que construir</h3>
+  <div class="col">
+    <p>En este orden, porque cada paso deja algo usable:</p>
+    <ol>
+      <li><strong>Registrar movimiento + saldo por billetera.</strong> Con solo esto la app ya sirve más que el cuaderno.</li>
+      <li><strong>Abrir y cerrar caja con conteo a ciegas.</strong> Es lo que convierte el registro en control.</li>
+      <li><strong>Historial con filtros</strong>, alcanzable desde cualquier cifra.</li>
+      <li><strong>Reportes por periodo</strong> y gastos por categoría.</li>
+      <li><strong>Exportar y respaldar.</strong> Va de último en construcción, pero <em>antes</em> de que el dueño meta datos reales: perder tres meses de registros mata la app para siempre.</li>
+    </ol>
+  </div>
+</section>
+
+<footer>
+  <p>Documento de diseño · Cuadre Diario v0.1 · Las cifras de las pantallas son de ejemplo. Los supuestos van marcados con <span class="supuesto">supuesto</span>.</p>
+</footer>
+
+</div>

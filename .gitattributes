@@ -1,0 +1,17 @@
+# Normaliza los finales de línea: en el repositorio siempre LF, en el disco
+# lo que use cada sistema. Evita que un mismo archivo aparezca como cambiado
+# solo por haberse abierto en Windows.
+* text=auto eol=lf
+
+# Binarios: que git no los toque.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+
+# El lockfile no aporta nada en las diferencias.
+pnpm-lock.yaml -diff linguist-generated

@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Paleta del documento de diseño (docs/cuadre-diario.html).
+ * Los colores viven como tokens para que el tema oscuro sea un cambio de
+ * variables y no una duplicación de clases por componente.
+ */
+:root {
+  --papel: 245 247 242;
+  --superficie: 255 255 255;
+  --superficie-2: 237 241 233;
+  --tinta: 22 29 24;
+  --tinta-2: 74 85 77;
+  --tinta-3: 120 131 123;
+  --linea: 217 224 213;
+  --linea-fuerte: 184 196 180;
+  --verde: 15 107 79;
+  --verde-suave: 220 237 227;
+  --sobre-verde: 255 255 255;
+  --ladrillo: 158 47 43;
+  --ladrillo-suave: 246 226 224;
+  --oro: 138 97 4;
+  --oro-suave: 246 236 210;
+
+  --fuente-sans: 'Archivo', 'Segoe UI', system-ui, sans-serif;
+  --fuente-mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+}
+
+.dark {
+  --papel: 16 19 16;
+  --superficie: 24 28 24;
+  --superficie-2: 31 36 30;
+  --tinta: 231 236 228;
+  --tinta-2: 170 180 167;
+  --tinta-3: 130 141 131;
+  --linea: 44 51 43;
+  --linea-fuerte: 67 76 65;
+  --verde: 92 190 147;
+  --verde-suave: 27 50 39;
+  --sobre-verde: 13 26 20;
+  --ladrillo: 227 144 137;
+  --ladrillo-suave: 51 29 27;
+  --oro: 217 172 85;
+  --oro-suave: 46 38 18;
+}
+
+@layer base {
+  html {
+    /* El teclado numérico de iOS hace zoom si el texto baja de 16px. */
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-papel text-tinta font-sans antialiased;
+    /* Deja espacio para la barra inferior en móvil. */
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  /* Las cifras se leen en columna: los dígitos deben alinearse. */
+  .cifra {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Foco visible siempre: se navega con teclado en escritorio. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-verde ring-offset-2 ring-offset-papel;
+  }
+
+  /* En móvil el objetivo táctil mínimo cómodo es 44px. */
+  button,
+  a[role='button'] {
+    touch-action: manipulation;
+  }
+}
+
+@layer components {
+  .tarjeta {
+    @apply rounded-lg border border-linea bg-superficie;
+  }
+
+  .etiqueta {
+    @apply font-mono text-[0.625rem] uppercase tracking-[0.09em] text-tinta-3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
