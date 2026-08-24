@@ -317,6 +317,34 @@ create policy propias_select on conteos_arqueo  for select using (propietario = 
 create policy propias_insert on conteos_arqueo  for insert with check (propietario = auth.uid());
 
 -- ---------------------------------------------------------------------------
+-- Permisos explícitos sobre la API
+-- ---------------------------------------------------------------------------
+--
+-- El proyecto se crea con «exponer tablas nuevas automáticamente» apagado,
+-- así que ninguna tabla es alcanzable por la API hasta que se le dé permiso
+-- aquí. Es una segunda barrera detrás de RLS: si algún día se agrega una
+-- tabla y se olvida su política, no queda expuesta por descuido.
+--
+-- Solo `authenticated`. A `anon` no se le da nada: todas las políticas se
+-- apoyan en `auth.uid()`, que sin sesión es nulo, así que un permiso para
+-- anónimos no serviría para nada y sí ampliaría la superficie.
+
+grant usage on schema public to authenticated;
+
+-- Lectura, alta y modificación. DELETE en ninguna tabla: nada se borra.
+grant select, insert, update on billeteras      to authenticated;
+grant select, insert, update on categorias      to authenticated;
+grant select, insert, update on ajustes_negocio to authenticated;
+grant select, insert, update on sesiones_caja   to authenticated;
+grant select, insert, update on movimientos     to authenticated;
+
+-- El arqueo se congela al cerrar: se escribe una vez y no se modifica.
+grant select, insert on conteos_arqueo to authenticated;
+
+-- La vista de saldos hereda RLS de las tablas (`security_invoker = true`).
+grant select on saldos_por_billetera to authenticated;
+
+-- ---------------------------------------------------------------------------
 -- Saldos: se calculan, no se guardan
 -- ---------------------------------------------------------------------------
 
