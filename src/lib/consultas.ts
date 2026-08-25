@@ -2,6 +2,7 @@ import { cache } from 'react'
 
 import { situacionDeCaja, type SituacionCaja } from '@/dominio/arqueo'
 import { resumirPeriodo, type ResumenPeriodo } from '@/dominio/movimientos'
+import type { Existencia, Producto } from '@/dominio/inventario'
 import type {
   Billetera,
   Categoria,
@@ -207,3 +208,59 @@ export async function estadoHoy(): Promise<EstadoHoy> {
     umbralDiferencia: ajustes.umbralDiferencia,
   }
 }
+
+// ---------------------------------------------------------------------------
+// Inventario
+// ---------------------------------------------------------------------------
+
+export const productos = cache(async (): Promise<Producto[]> => {
+  const supabase = clienteServidor()
+  const { data } = await supabase
+    .from('productos')
+    .select('id, nombre, codigo, unidad, precio_venta, costo_actual, controla_stock, stock_minimo, favorito, activo')
+    .eq('activo', true)
+    .order('favorito', { ascending: false })
+    .order('nombre')
+
+  return (data ?? []).map((f) => ({
+    id: f.id,
+    nombre: f.nombre,
+    codigo: f.codigo,
+    unidad: f.unidad,
+    precioVenta: f.precio_venta,
+    costoActual: f.costo_actual,
+    controlaStock: f.controla_stock,
+    stockMinimo: Number(f.stock_minimo),
+    favorito: f.favorito,
+    activo: f.activo,
+  }))
+})
+
+/**
+ * Existencias, calculadas por Postgres con la vista `existencias`.
+ *
+ * Igual que con los saldos de plata: sumar aquí obligaría a traer todos los
+ * movimientos de inventario, y la API corta en 1000 filas. La vista suma la
+ * columna entera sin ese límite.
+ */
+export const existencias = cache(async (): Promise<Existencia[]> => {
+  const supabase = clienteServidor()
+  const { data } = await supabase
+    .from('existencias')
+    .select('*')
+    .order('favorito', { ascending: false })
+    .order('nombre')
+
+  return (data ?? []).map((f) => ({
+    productoId: f.producto_id,
+    nombre: f.nombre,
+    unidad: f.unidad,
+    precioVenta: f.precio_venta,
+    costoActual: f.costo_actual,
+    controlaStock: f.controla_stock,
+    stockMinimo: Number(f.stock_minimo),
+    favorito: f.favorito,
+    cantidad: Number(f.cantidad),
+    valorAlCosto: Number(f.valor_al_costo),
+  }))
+})

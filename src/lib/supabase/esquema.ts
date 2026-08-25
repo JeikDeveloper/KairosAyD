@@ -1,4 +1,8 @@
 import type {
+  TipoMovimientoInventario,
+  Unidad,
+} from '@/dominio/inventario'
+import type {
   EstadoMovimiento,
   EstadoSesion,
   TipoMovimiento,
@@ -92,6 +96,52 @@ type FilaSaldo = {
   saldo: number
 }
 
+type FilaProducto = {
+  id: string
+  propietario: string
+  nombre: string
+  codigo: string | null
+  unidad: Unidad
+  precio_venta: number
+  costo_actual: number
+  controla_stock: boolean
+  stock_minimo: number
+  favorito: boolean
+  activo: boolean
+  creado_en: string
+}
+
+type FilaMovimientoInventario = {
+  id: string
+  propietario: string
+  producto_id: string
+  sesion_id: string
+  tipo: TipoMovimientoInventario
+  cantidad: number
+  costo_unitario: number
+  precio_unitario: number
+  movimiento_id: string | null
+  nota: string | null
+  estado: EstadoMovimiento
+  creado_en: string
+  anulado_en: string | null
+  motivo_anulacion: string | null
+}
+
+type FilaExistencia = {
+  propietario: string
+  producto_id: string
+  nombre: string
+  unidad: Unidad
+  precio_venta: number
+  costo_actual: number
+  controla_stock: boolean
+  stock_minimo: number
+  favorito: boolean
+  cantidad: number
+  valor_al_costo: number
+}
+
 /** Campos que pone la base de datos y el cliente nunca envía. */
 type Insertable<T, Automaticos extends keyof T> = Omit<T, Automaticos> &
   Partial<Pick<T, Automaticos>>
@@ -130,9 +180,34 @@ export type BaseDeDatos = {
         | 'nota'
       >
       conteos_arqueo: Tabla<FilaConteo, 'id' | 'creado_en' | 'motivo' | 'nota'>
+      productos: Tabla<
+        FilaProducto,
+        | 'id'
+        | 'creado_en'
+        | 'codigo'
+        | 'unidad'
+        | 'costo_actual'
+        | 'controla_stock'
+        | 'stock_minimo'
+        | 'favorito'
+        | 'activo'
+      >
+      movimientos_inventario: Tabla<
+        FilaMovimientoInventario,
+        | 'id'
+        | 'creado_en'
+        | 'estado'
+        | 'anulado_en'
+        | 'motivo_anulacion'
+        | 'costo_unitario'
+        | 'precio_unitario'
+        | 'movimiento_id'
+        | 'nota'
+      >
     }
     Views: {
       saldos_por_billetera: { Row: FilaSaldo; Relationships: [] }
+      existencias: { Row: FilaExistencia; Relationships: [] }
     }
     Functions: Record<string, never>
     Enums: {
@@ -141,6 +216,8 @@ export type BaseDeDatos = {
       estado_sesion: EstadoSesion
       clase_billetera: 'efectivo' | 'digital'
       direccion_categoria: 'entrada' | 'salida'
+      tipo_movimiento_inventario: TipoMovimientoInventario
+      unidad_producto: Unidad
     }
     CompositeTypes: Record<string, never>
   }

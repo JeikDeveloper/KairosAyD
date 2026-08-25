@@ -1,16 +1,17 @@
 import Link from 'next/link'
 
 import { FormularioRegistro } from './formulario'
-import { billeteras, categorias, sesionAbierta } from '@/lib/consultas'
+import { billeteras, categorias, productos, sesionAbierta } from '@/lib/consultas'
 
 export const metadata = { title: 'Registrar · Cuadre Diario' }
 export const dynamic = 'force-dynamic'
 
 export default async function PaginaRegistrar() {
-  const [sesion, listaBilleteras, listaCategorias] = await Promise.all([
+  const [sesion, listaBilleteras, listaCategorias, listaProductos] = await Promise.all([
     sesionAbierta(),
     billeteras(),
     categorias(),
+    productos(),
   ])
 
   // Sin caja abierta no se registra nada. Se explica y se ofrece la salida,
@@ -35,7 +36,11 @@ export default async function PaginaRegistrar() {
   return (
     <div className="px-4 py-5">
       <h1 className="mb-4 text-xl font-bold tracking-tight">¿Qué vas a registrar?</h1>
-      <FormularioRegistro billeteras={listaBilleteras} categorias={listaCategorias} />
+      <FormularioRegistro
+        billeteras={listaBilleteras}
+        categorias={listaCategorias}
+        productos={listaProductos}
+      />
     </div>
   )
 }

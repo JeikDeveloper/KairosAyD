@@ -116,6 +116,11 @@
     box-shadow: 0 1px 2px rgb(var(--tinta) / 0.06);
   }
 
+  .pill {
+    @apply rounded font-mono text-[0.625rem] font-semibold uppercase tracking-wide;
+    padding: 2px 6px;
+  }
+
   /* Campos: el borde marcado ayuda a ver dónde se escribe con sol de frente. */
   .campo {
     @apply h-12 w-full rounded-xl border border-linea-fuerte bg-superficie px-3.5
