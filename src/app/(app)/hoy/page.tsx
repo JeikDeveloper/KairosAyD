@@ -5,13 +5,18 @@ import { ListaMovimientos } from '@/componentes/lista-movimientos'
 import { formatearNumero, formatearPesos } from '@/dominio/dinero'
 import { diaLargo, horaEnBogota } from '@/dominio/fecha'
 import type { Billetera, Pesos } from '@/dominio/tipos'
-import { estadoHoy } from '@/lib/consultas'
+import { formatearCantidad, porReponer } from '@/dominio/inventario'
+import { estadoHoy, existencias } from '@/lib/consultas'
 
 export const metadata = { title: 'Hoy · Cuadre Diario' }
 export const dynamic = 'force-dynamic'
 
 export default async function PaginaHoy() {
-  const { situacion, billeteras, saldos, resumen, ultimos } = await estadoHoy()
+  const [{ situacion, billeteras, saldos, resumen, ultimos }, inventario] = await Promise.all([
+    estadoHoy(),
+    existencias(),
+  ])
+  const reponer = porReponer(inventario)
 
   // Caja cerrada: la pantalla no muestra cifras del día porque no hay día.
   // Abrir la caja es la única acción posible.
@@ -102,6 +107,31 @@ export default async function PaginaHoy() {
           </p>
         )}
       </section>
+
+      {/* El inventario no ocupa pestaña porque se consulta dos o tres veces
+          por semana. Pero lo urgente sí sube aquí: si algo se agotó, hay que
+          saberlo hoy, no el día que se vaya a comprar. */}
+      {reponer.length > 0 ? (
+        <Link
+          href="/existencias"
+          className="tarjeta flex items-center justify-between gap-3 border-oro p-3
+                     active:bg-superficie-2"
+        >
+          <span>
+            <b className="block text-sm text-oro">Hay que reponer ({reponer.length})</b>
+            <small className="mt-0.5 block text-[0.6875rem] text-tinta-2">
+              {reponer
+                .slice(0, 3)
+                .map((p) => p.nombre)
+                .join(', ')}
+              {reponer.length > 3 ? ` y ${reponer.length - 3} más` : ''}
+            </small>
+          </span>
+          <span className="cifra shrink-0 font-mono text-xs text-tinta-3">
+            {formatearCantidad(reponer[0]?.cantidad ?? 0, reponer[0]?.unidad ?? 'unidad')}
+          </span>
+        </Link>
+      ) : null}
 
       <Link
         href="/caja/cerrar"

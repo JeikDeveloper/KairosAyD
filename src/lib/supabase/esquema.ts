@@ -128,6 +128,32 @@ type FilaMovimientoInventario = {
   motivo_anulacion: string | null
 }
 
+type FilaResumenDia = {
+  propietario: string
+  fecha_operativa: string
+  entro: number
+  salio: number
+  neto: number
+  cantidad: number
+}
+
+type FilaGastoCategoria = {
+  propietario: string
+  fecha_operativa: string
+  categoria_id: string | null
+  categoria: string
+  total: number
+  cantidad: number
+}
+
+type FilaGananciaDia = {
+  propietario: string
+  fecha_operativa: string
+  venta_con_costo: number
+  costo_mercancia: number
+  ganancia: number
+}
+
 type FilaExistencia = {
   propietario: string
   producto_id: string
@@ -208,6 +234,9 @@ export type BaseDeDatos = {
     Views: {
       saldos_por_billetera: { Row: FilaSaldo; Relationships: [] }
       existencias: { Row: FilaExistencia; Relationships: [] }
+      resumen_por_dia: { Row: FilaResumenDia; Relationships: [] }
+      gastos_por_categoria_dia: { Row: FilaGastoCategoria; Relationships: [] }
+      ganancia_por_dia: { Row: FilaGananciaDia; Relationships: [] }
     }
     Functions: Record<string, never>
     Enums: {
