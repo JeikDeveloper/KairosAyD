@@ -35,8 +35,7 @@ export function AvisoCaja({ situacion }: { situacion: SituacionCaja }) {
         </p>
         <Link
           href="/caja/cerrar"
-          className="mt-3 flex min-h-[44px] items-center justify-center rounded-lg
-                     bg-oro text-sm font-bold text-papel"
+          className="boton-principal mt-3 bg-oro text-papel shadow-none"
         >
           Cerrar la caja del {diaCorto(situacion.sesion.fechaOperativa)}
         </Link>
@@ -56,8 +55,7 @@ export function AvisoCaja({ situacion }: { situacion: SituacionCaja }) {
       </p>
       <Link
         href="/caja/abrir"
-        className="mt-3 flex min-h-[48px] items-center justify-center rounded-lg
-                   bg-verde text-base font-bold text-sobre-verde"
+        className="boton-principal mt-3"
       >
         Abrir caja
       </Link>

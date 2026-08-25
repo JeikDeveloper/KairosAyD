@@ -31,8 +31,7 @@ export function FormularioEntrar({
           autoComplete="email"
           autoCapitalize="none"
           spellCheck={false}
-          className="h-12 rounded-lg border border-linea bg-superficie px-3.5 text-base
-                     placeholder:text-tinta-3 focus:border-verde"
+          className="campo"
           placeholder="tucorreo@ejemplo.com"
         />
       </label>
@@ -45,8 +44,7 @@ export function FormularioEntrar({
           required
           minLength={8}
           autoComplete={modo === 'entrar' ? 'current-password' : 'new-password'}
-          className="h-12 rounded-lg border border-linea bg-superficie px-3.5 text-base
-                     focus:border-verde"
+          className="campo"
           placeholder="Al menos 8 caracteres"
         />
       </label>
@@ -82,8 +80,7 @@ function BotonEnviar({ modo }: { modo: 'entrar' | 'crear' }) {
     <button
       type="submit"
       disabled={pending}
-      className="h-12 rounded-lg bg-verde text-base font-bold text-sobre-verde
-                 disabled:opacity-60"
+      className="boton-principal"
     >
       {pending ? 'Un momento…' : modo === 'entrar' ? 'Entrar' : 'Crear mi cuenta'}
     </button>

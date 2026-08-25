@@ -53,9 +53,9 @@ export function TecladoPesos({
           value={digitos === '' ? '' : new Intl.NumberFormat('es-CO').format(monto ?? 0)}
           onChange={(evento) => alCambiar(evento.target.value)}
           placeholder="0"
-          className="h-16 w-full rounded-lg border border-linea bg-superficie pl-10 pr-4
-                     text-right font-mono text-2xl font-bold tabular-nums
-                     placeholder:text-tinta-3 focus:border-verde"
+          className="h-16 w-full rounded-xl border-2 border-linea-fuerte bg-superficie
+                     pl-10 pr-4 text-right font-mono text-2xl font-bold tabular-nums
+                     shadow-sm placeholder:text-tinta-3 focus:border-verde focus:outline-none"
         />
       </div>
 

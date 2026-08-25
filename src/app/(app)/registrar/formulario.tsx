@@ -70,7 +70,8 @@ export function FormularioRegistro({
                 setCategoriaId('')
               }}
               aria-pressed={tipo === opcion}
-              className={`min-h-[52px] rounded-lg border px-3 py-2 text-left text-sm font-bold
+              className={`min-h-[56px] rounded-xl border-2 px-3 py-2 text-left text-sm font-bold
+                          shadow-sm transition-transform duration-100 active:translate-y-px
                           ${
                             tipo === opcion
                               ? 'border-verde bg-verde-suave text-verde'
@@ -100,7 +101,8 @@ export function FormularioRegistro({
               type="button"
               onClick={() => setBilleteraId(billetera.id)}
               aria-pressed={billeteraId === billetera.id}
-              className={`min-h-[48px] rounded-lg border px-3 text-sm font-semibold
+              className={`min-h-[52px] rounded-xl border-2 px-3 text-sm font-semibold
+                          shadow-sm transition-transform duration-100 active:translate-y-px
                           ${
                             billeteraId === billetera.id
                               ? 'border-verde bg-verde-suave text-verde'
@@ -123,7 +125,7 @@ export function FormularioRegistro({
           <select
             value={categoriaId}
             onChange={(evento) => setCategoriaId(evento.target.value)}
-            className="h-12 rounded-lg border border-linea bg-superficie px-3 text-base"
+            className="campo"
           >
             <option value="">Sin categoría</option>
             {categoriasVisibles.map((categoria) => (
@@ -146,8 +148,7 @@ export function FormularioRegistro({
           onChange={(evento) => setNota(evento.target.value)}
           maxLength={500}
           placeholder="Ej: gaseosas a don Luis"
-          className="h-12 rounded-lg border border-linea bg-superficie px-3.5 text-base
-                     placeholder:text-tinta-3"
+          className="campo"
         />
       </label>
 
@@ -173,8 +174,7 @@ function BotonGuardar({ habilitado, tipo }: { habilitado: boolean; tipo: TipoMan
     <button
       type="submit"
       disabled={!habilitado || pending}
-      className="sticky bottom-24 h-14 rounded-lg bg-verde text-base font-bold
-                 text-sobre-verde disabled:opacity-50"
+      className="boton-principal sticky bottom-28 min-h-[56px]"
     >
       {pending ? 'Guardando…' : `Guardar ${ETIQUETA_TIPO[tipo].toLowerCase()}`}
     </button>

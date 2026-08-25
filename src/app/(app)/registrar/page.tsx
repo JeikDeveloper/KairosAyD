@@ -24,8 +24,7 @@ export default async function PaginaRegistrar() {
         </p>
         <Link
           href="/caja/abrir"
-          className="mt-4 flex min-h-[48px] items-center justify-center rounded-lg
-                     bg-verde text-base font-bold text-sobre-verde"
+          className="boton-principal mt-4"
         >
           Abrir caja
         </Link>

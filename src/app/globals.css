@@ -78,10 +78,49 @@
 @layer components {
   .tarjeta {
     @apply rounded-lg border border-linea bg-superficie;
+    box-shadow: 0 1px 2px rgb(var(--tinta) / 0.04);
   }
 
   .etiqueta {
     @apply font-mono text-[0.625rem] uppercase tracking-[0.09em] text-tinta-3;
+  }
+
+  /*
+   * Botón principal.
+   *
+   * La sombra y el hundido al presionar no son adorno: en un celular no hay
+   * puntero ni estado «hover», así que el único aviso de que el toque se
+   * registró es que el botón se mueva. Sin eso el dueño toca dos veces
+   * creyendo que no funcionó, y en esta app un doble toque puede ser una
+   * venta registrada dos veces.
+   */
+  .boton-principal {
+    @apply flex min-h-[52px] items-center justify-center rounded-xl bg-verde px-4
+           text-base font-bold tracking-tight text-sobre-verde
+           transition-[transform,box-shadow,opacity] duration-100
+           active:translate-y-px disabled:opacity-50 disabled:shadow-none;
+    box-shadow:
+      0 1px 0 rgb(var(--tinta) / 0.08),
+      0 4px 12px -3px rgb(var(--verde) / 0.45);
+  }
+
+  .boton-principal:active:not(:disabled) {
+    box-shadow: 0 1px 4px -1px rgb(var(--verde) / 0.5);
+  }
+
+  .boton-secundario {
+    @apply flex min-h-[52px] items-center justify-center rounded-xl border
+           border-linea-fuerte bg-superficie px-4 text-base font-semibold text-tinta
+           transition-transform duration-100 active:translate-y-px
+           active:bg-superficie-2 disabled:opacity-50;
+    box-shadow: 0 1px 2px rgb(var(--tinta) / 0.06);
+  }
+
+  /* Campos: el borde marcado ayuda a ver dónde se escribe con sol de frente. */
+  .campo {
+    @apply h-12 w-full rounded-xl border border-linea-fuerte bg-superficie px-3.5
+           text-base placeholder:text-tinta-3
+           focus:border-verde focus:outline-none;
   }
 }
 

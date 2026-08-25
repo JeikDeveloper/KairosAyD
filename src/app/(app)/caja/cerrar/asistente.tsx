@@ -71,7 +71,7 @@ export function AsistenteCierre({ billeteras }: { billeteras: Billetera[] }) {
         <button
           type="button"
           onClick={() => setPaso('contar')}
-          className="mt-2 h-14 rounded-lg bg-verde text-base font-bold text-sobre-verde"
+          className="boton-principal mt-2 min-h-[56px]"
         >
           Ya está todo registrado, contar
         </button>
@@ -117,7 +117,7 @@ export function AsistenteCierre({ billeteras }: { billeteras: Billetera[] }) {
             <button
               type="button"
               onClick={() => setIndice(indice - 1)}
-              className="h-14 flex-1 rounded-lg border border-linea bg-superficie text-base font-semibold"
+              className="boton-secundario flex-1"
             >
               Atrás
             </button>
@@ -143,8 +143,7 @@ export function AsistenteCierre({ billeteras }: { billeteras: Billetera[] }) {
                 setPaso('revelacion')
               })
             }}
-            className="h-14 flex-[2] rounded-lg bg-verde text-base font-bold
-                       text-sobre-verde disabled:opacity-50"
+            className="boton-principal flex-[2]"
           >
             {enviando ? 'Calculando…' : esUltima ? 'Ver las diferencias' : 'Siguiente'}
           </button>
@@ -234,7 +233,7 @@ export function AsistenteCierre({ billeteras }: { billeteras: Billetera[] }) {
               setIndice(0)
               setArqueo(null)
             }}
-            className="h-14 flex-1 rounded-lg border border-linea bg-superficie text-base font-semibold"
+            className="boton-secundario flex-1"
           >
             Volver a contar
           </button>
@@ -242,8 +241,7 @@ export function AsistenteCierre({ billeteras }: { billeteras: Billetera[] }) {
             type="button"
             disabled={faltanMotivos}
             onClick={() => setPaso('base')}
-            className="h-14 flex-[2] rounded-lg bg-verde text-base font-bold
-                       text-sobre-verde disabled:opacity-50"
+            className="boton-principal flex-[2]"
           >
             {faltanMotivos ? 'Falta explicar una diferencia' : 'Continuar'}
           </button>
@@ -311,8 +309,7 @@ export function AsistenteCierre({ billeteras }: { billeteras: Billetera[] }) {
               router.refresh()
             })
           }}
-          className="h-14 rounded-lg bg-verde text-base font-bold text-sobre-verde
-                     disabled:opacity-50"
+          className="boton-principal min-h-[56px]"
         >
           {enviando ? 'Cerrando…' : 'Cerrar el día'}
         </button>
@@ -336,7 +333,7 @@ export function AsistenteCierre({ billeteras }: { billeteras: Billetera[] }) {
       <button
         type="button"
         onClick={() => router.push('/hoy')}
-        className="h-14 rounded-lg bg-verde text-base font-bold text-sobre-verde"
+        className="boton-principal min-h-[56px]"
       >
         Volver al inicio
       </button>
@@ -350,8 +347,8 @@ function Pregunta({ texto, hrefRegistrar }: { texto: string; hrefRegistrar: stri
       <p className="text-base font-semibold">{texto}</p>
       <a
         href={hrefRegistrar}
-        className="mt-2 inline-flex min-h-[40px] items-center rounded-lg border border-verde
-                   px-4 text-sm font-bold text-verde"
+        className="mt-2 inline-flex min-h-[44px] items-center rounded-xl border-2
+                   border-verde px-4 text-sm font-bold text-verde active:bg-verde-suave"
       >
         Sí, registrarlo ahora
       </a>

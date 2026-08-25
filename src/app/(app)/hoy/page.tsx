@@ -105,8 +105,7 @@ export default async function PaginaHoy() {
 
       <Link
         href="/caja/cerrar"
-        className="flex min-h-[48px] items-center justify-center rounded-lg bg-verde
-                   text-[0.9375rem] font-bold tracking-tight text-sobre-verde"
+        className="boton-principal"
       >
         Cerrar caja del día
       </Link>

@@ -68,7 +68,7 @@ function BotonAbrir({ habilitado }: { habilitado: boolean }) {
     <button
       type="submit"
       disabled={!habilitado || pending}
-      className="h-14 rounded-lg bg-verde text-base font-bold text-sobre-verde disabled:opacity-50"
+      className="boton-principal min-h-[56px]"
     >
       {pending ? 'Abriendo…' : 'Abrir caja y empezar el día'}
     </button>
